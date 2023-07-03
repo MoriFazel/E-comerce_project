@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
+    # product_set = models.ManyToManyField('Product') #ManyToManyField means that each Promotion can be associated with many Products, and each Product can be associated with many Promotions
 class Collection(models.Model):
     title = models.CharField(max_length=255)
 
@@ -13,6 +17,7 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_updated = models.DateTimeField(auto_now=True) #different from auto_now_add which is only when created
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT) #ForeignKey means that each Product can only be associated with one Collection, but each Collection can be associated with many Products
+    promotions = models.ManyToManyField(Promotion) #ManyToManyField means that each Product can be associated with many Promotions, and each Promotion can be associated with many Products
 
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
