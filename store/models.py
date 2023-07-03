@@ -8,6 +8,11 @@ class Promotion(models.Model):
     # product_set = models.ManyToManyField('Product') #ManyToManyField means that each Promotion can be associated with many Products, and each Product can be associated with many Promotions
 class Collection(models.Model):
     title = models.CharField(max_length=255)
+    featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+') 
+    #ForeignKey means that each Collection can only be associated with one Product, but each Product can be associated with many Collections. 
+    #on_delete=models.SET_NULL means that if the Product is deleted, the featured_product field for all Collections will be set to NULL. related_name='+' means that the reverse relationship will not be created. 
+    #This is useful to avoid name collisions for fields with the same name. 
+    #the '+' is a special value that can only be used in this context. It means that the reverse relationship for this field will be disabled.
 
 class Product(models.Model):
     #sku = models.CharField(max_length=10,primary_key=True, unique=True) #unique=True means that no two products can have the same SKU
