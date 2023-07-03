@@ -1,6 +1,10 @@
 from django.db import models
 
 # Create your models here.
+
+class Collection(models.Model):
+    title = models.CharField(max_length=255)
+
 class Product(models.Model):
     #sku = models.CharField(max_length=10,primary_key=True, unique=True) #unique=True means that no two products can have the same SKU
     title = models.CharField(max_length=255) 
@@ -8,7 +12,8 @@ class Product(models.Model):
     description = models.TextField()
     inventory = models.IntegerField()
     last_updated = models.DateTimeField(auto_now=True) #different from auto_now_add which is only when created
-    
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT) #ForeignKey means that each Product can only be associated with one Collection, but each Collection can be associated with many Products
+
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
     MEMBERSHIP_SILVER = 'S'
@@ -44,9 +49,18 @@ class Order(models.Model):
     placed_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS_CHOICES, default= PAYMENT_STATUS_PENDING)
 
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     #zip = models.CharField(max_length=255)
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Address can only be associated with one Customer, and each Customer can only have one Address
+    #customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Address can only be associated with one Customer, and each Customer can only have one Address
+    #option2:
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE) #ForeignKey means that each Address can be associated with many Customers, but each Customer can only have one Address
+    
