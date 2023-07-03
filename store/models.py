@@ -66,3 +66,17 @@ class Address(models.Model):
     #option2:
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE) #ForeignKey means that each Address can be associated with many Customers, but each Customer can only have one Address
     
+
+class Cart(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    checked_out_at = models.DateTimeField(null=True)
+    #customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Cart can only be associated with one Customer, and each Customer can only have one Cart
+    #option2:
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE) #ForeignKey means that each Cart can be associated with many Customers, but each Customer can only have one Cart
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE) #ForeignKey means that each CartItem can only be associated with one Cart, but each Cart can be associated with many CartItems
+    product = models.ForeignKey(Product, on_delete=models.CASCADE) #ForeignKey means that each CartItem can only be associated with one Product, but each Product can be associated with many CartItems
+    quantity = models.PositiveSmallIntegerField() #PositiveSmallIntegerField means that the value must be a positive integer
+    
