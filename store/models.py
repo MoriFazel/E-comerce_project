@@ -48,17 +48,19 @@ class Order(models.Model):
     ]
     placed_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS_CHOICES, default= PAYMENT_STATUS_PENDING)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT) #ForeignKey means that each Order can only be associated with one Customer, but each Customer can be associated with many Orders
+
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.PROTECT)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    quantity = models.PositiveSmallIntegerField()
-    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+    order = models.ForeignKey(Order, on_delete=models.PROTECT) #ForeignKey means that each OrderItem can only be associated with one Order, but each Order can be associated with many OrderItems
+    product = models.ForeignKey(Product, on_delete=models.PROTECT) #ForeignKey means that each OrderItem can only be associated with one Product, but each Product can be associated with many OrderItems
+    quantity = models.PositiveSmallIntegerField() #PositiveSmallIntegerField means that the value must be a positive integer
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2) #max_digits=6 means that the value can have up to 6 digits, and decimal_places=2 means that 2 of those digits can be after the decimal point
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
+    street = models.CharField(max_length=255) 
+    city = models.CharField(max_length=255) 
     #zip = models.CharField(max_length=255)
     #customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Address can only be associated with one Customer, and each Customer can only have one Address
     #option2:
