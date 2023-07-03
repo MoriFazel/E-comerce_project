@@ -43,3 +43,10 @@ class Order(models.Model):
     ]
     placed_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS_CHOICES, default= PAYMENT_STATUS_PENDING)
+
+
+class Address(models.Model):
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    #zip = models.CharField(max_length=255)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Address can only be associated with one Customer, and each Customer can only have one Address
