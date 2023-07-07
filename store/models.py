@@ -17,7 +17,8 @@ class Collection(models.Model):
 class Product(models.Model):
     #sku = models.CharField(max_length=10,primary_key=True, unique=True) #unique=True means that no two products can have the same SKU
     title = models.CharField(max_length=255) 
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    slug = models.SlugField() #slug is a short label containing only letters, numbers, underscores or hyphens. They’re generally used in URLs. 
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     description = models.TextField()
     inventory = models.IntegerField()
     last_updated = models.DateTimeField(auto_now=True) #different from auto_now_add which is only when created
@@ -44,6 +45,9 @@ class Customer(models.Model):
     #created_at = models.DateTimeField(auto_now_add=True) #auto_now_add=True means that the created_at field will be set to the current date and time when a Customer is created
     membership = models.CharField(max_length=50, choices=MEMBERSHIP_CHOICES, default= MEMBERSHIP_BRONZE)
 
+    class Meta:
+        db_table = 'store_customers' #it means that the database table for the Customer model will be store_customers instead of store_customer
+        indexes = [models.Index(fields=['last_name', 'first_name'])] #it means that the database will create an index for the last_name and first_name fields
 
 class Order(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
@@ -75,7 +79,7 @@ class Address(models.Model):
     #customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True) #OneToOneField means that each Address can only be associated with one Customer, and each Customer can only have one Address
     #option2:
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE) #ForeignKey means that each Address can be associated with many Customers, but each Customer can only have one Address
-    
+    zip = models.CharField(max_length=255)    
 
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

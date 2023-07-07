@@ -16,4 +16,4 @@ class TaggedItem(models.Model):
     #ID of product
     product = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()
+    #content_object = GenericForeignKey()

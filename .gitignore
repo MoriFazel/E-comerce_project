@@ -127,7 +127,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-storefront/
+#storefront/
+store_front/
 
 # Spyder project settings
 .spyderproject
